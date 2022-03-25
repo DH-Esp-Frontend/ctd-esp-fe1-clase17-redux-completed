@@ -1,15 +1,20 @@
-import React, {useRef, useState} from "react";
-import {useDispatch} from "react-redux";
+import React, {FC, useState} from "react";
+import {connect, ConnectedProps} from "react-redux";
 import {buscarPokemon} from "../actions/pokemonActions";
 
-const BuscarPokemon = () => {
-    const [text, setText] = useState<string>("");
-    // No olvidemos agregar el hook de redux para obtener el acceso al objeto dispatch
-    const dispatch = useDispatch();
+const mapState = () => ({})
 
+const mapDispatch = {
+    buscarPokemon,
+}
+
+const connector = connect(mapState, mapDispatch)
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const BuscarPokemon:FC<PropsFromRedux> = ({buscarPokemon}:PropsFromRedux) => {
+    const [text, setText] = useState<string>("");
     const onBuscarClick = () => {
-        // Aqui debemos despachar una acción utilizando el dispatch proveniente del hook de redux
-        dispatch(buscarPokemon(text));
+        buscarPokemon(text);
     }
 
     return (
@@ -21,4 +26,4 @@ const BuscarPokemon = () => {
     );
 }
 
-export default BuscarPokemon;
+export default connector(BuscarPokemon);
